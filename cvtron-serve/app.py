@@ -5,6 +5,7 @@ import cherrypy
 import uuid
 from cvtron.modeling.classifier import api
 from cvtron.utils.reporter import print_prob
+from cvtron.utils.reporter import report_hardware
 import json
 
 CHERRY_CONFIG = {
@@ -53,9 +54,15 @@ class App(object):
                 size += len(data)
         # Now classify the input image
         topn = print_prob(self.classifier.classify(upload_file),5)
-        print(process_result(topn))
         out = {
             'result': process_result(topn)
+        }
+        return json.dumps(out)
+    @cherrypy.expose
+    def query_device(self):
+        hardware = report_hardware()
+        out = {
+            'result': hardware
         }
         return json.dumps(out)
 
