@@ -5,7 +5,6 @@ import cherrypy
 import uuid
 from cvtron.modeling.classifier import api
 from cvtron.utils.reporter import print_prob
-from cvtron.utils.reporter import report_hardware
 import json
 
 CHERRY_CONFIG = {
@@ -60,7 +59,7 @@ class App(object):
         return json.dumps(out)
     @cherrypy.expose
     def query_device(self):
-        hardware = report_hardware()
+        hardware = None
         out = {
             'result': hardware
         }
