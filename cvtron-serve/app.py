@@ -9,6 +9,10 @@ from utils.machine_reporter import Machine
 from config import BASE_FILE_PATH
 import json
 
+def enable_crossdomain():
+    cherrypy.response.headers["Access-Control-Allow-Origin"] = "*"
+    cherrypy.response.headers["Access-Control-Allow-Methods"] = "GET, POST, HEAD, PUT, DELETE"
+
 CHERRY_CONFIG = {
     'global': {
         'server.socket_host': '127.0.0.1',
@@ -61,6 +65,7 @@ class App(object):
 
     @cherrypy.expose(['device'])
     def device(self):
+        enable_crossdomain()
         m = Machine()
         out = {
             'result': m.get_all()

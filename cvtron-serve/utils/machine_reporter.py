@@ -71,7 +71,6 @@ class Machine(object):
         GPUs = []
         for g in range(numDevices):
             line = lines[g]
-            # print(line)
             vals = line.split(', ')
             # print(vals)
             for i in range(11):
@@ -120,3 +119,6 @@ class Machine(object):
             'gpu':self.get_gpu(),
             'mem':self.get_mem()
         }
+
+m = Machine()
+m.get_gpu()
