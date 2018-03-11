@@ -9,13 +9,21 @@ from utils.machine_reporter import Machine
 from config import BASE_FILE_PATH
 import json
 
-def enable_crossdomain():
-    cherrypy.response.headers["Access-Control-Allow-Origin"] = "*"
-    cherrypy.response.headers["Access-Control-Allow-Methods"] = "GET, POST, HEAD, PUT, DELETE"
+def cors():
+  if cherrypy.request.method == 'OPTIONS':
+    # preflign request 
+    # see http://www.w3.org/TR/cors/#cross-origin-request-with-preflight-0
+    cherrypy.response.headers['Access-Control-Allow-Methods'] = 'POST'
+    cherrypy.response.headers['Access-Control-Allow-Headers'] = 'content-type'
+    cherrypy.response.headers['Access-Control-Allow-Origin']  = '*'
+    # tell CherryPy no avoid normal handler
+    return True
+  else:
+    cherrypy.response.headers['Access-Control-Allow-Origin'] = '*'
 
 CHERRY_CONFIG = {
     'global': {
-        'server.socket_host': '127.0.0.1',
+        'server.socket_host': '0.0.0.0',
         'server.socket_port': 9090,
         'server.thread_pool': 8,
         'server.max_request_body_size': 0,
@@ -36,13 +44,15 @@ def process_result(result):
         json_result.append(result_dic)
     return json_result
 
+cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
 class App(object):
     def __init__(self):
         self.folder_name = 'img_'+str(uuid.uuid4()).split('-')[0]
         self.classifier = api.get_classifier()
 
-    @cherrypy.expose
+    @cherrypy.config(**{'tools.cors.on': True})
+    @cherrypy.expose(['classify'])
     def classify(self, ufile):
         upload_path = os.path.join(BASE_FILE_PATH, self.folder_name)
         if not os.path.exists(upload_path):
@@ -63,9 +73,9 @@ class App(object):
         }
         return json.dumps(out)
 
+    @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose(['device'])
     def device(self):
-        enable_crossdomain()
         m = Machine()
         out = {
             'result': m.get_all()

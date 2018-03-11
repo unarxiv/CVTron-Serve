@@ -119,6 +119,3 @@ class Machine(object):
             'gpu':self.get_gpu(),
             'mem':self.get_mem()
         }
-
-m = Machine()
-m.get_gpu()
