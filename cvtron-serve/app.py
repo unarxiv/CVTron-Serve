@@ -82,6 +82,19 @@ class App(object):
         }
         return json.dumps(out)
 
+    @cherrypy.config(**{'tools.cors.on': True})
+    @cherrypy.expose(['device'])
+    def detect(self):
+        out = {
+            'result':{
+                'x_min': 77.5373477935791,
+                'x_max': 376.87816429138184,
+                'y_min': 66.69588661193848,
+                'y_max': 387.60104179382324,
+                'class_name': 'tiger'
+            }
+        }
+        return json.dumps(out)
 
 if __name__ == '__main__':
     cherrypy.quickstart(App(), '/', CHERRY_CONFIG)
