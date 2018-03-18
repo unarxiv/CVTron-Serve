@@ -21,6 +21,8 @@ def cors():
   else:
     cherrypy.response.headers['Access-Control-Allow-Origin'] = '*'
 
+
+
 CHERRY_CONFIG = {
     'global': {
         'server.socket_host': '0.0.0.0',
@@ -30,6 +32,7 @@ CHERRY_CONFIG = {
         'server.socket_timeout': 60
     },
     '/static': {
+        'tools.cors.on': True,
         'tools.staticdir.on' : True,
         'tools.staticdir.dir' : os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'),
         'tools.staticdir.index' : 'index.html'

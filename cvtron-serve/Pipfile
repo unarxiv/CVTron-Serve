@@ -11,7 +11,7 @@ verify_ssl = true
 
 [packages]
 
-CherryPy = "*"
+cherrypy = "*"
 requests = "*"
 cvtron = "*"
 
