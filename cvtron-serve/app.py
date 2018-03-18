@@ -27,7 +27,12 @@ CHERRY_CONFIG = {
         'server.socket_port': 9090,
         'server.thread_pool': 8,
         'server.max_request_body_size': 0,
-        'server.socket_timeout': 60,
+        'server.socket_timeout': 60
+    },
+    '/static': {
+        'tools.staticdir.on' : True,
+        'tools.staticdir.dir' : os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'),
+        'tools.staticdir.index' : 'index.html'
     }
 }
 
@@ -49,11 +54,13 @@ cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 class App(object):
     def __init__(self):
         self.folder_name = 'img_'+str(uuid.uuid4()).split('-')[0]
-        self.classifier = api.get_classifier()
-
+        self.classifier = None
+    
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose(['classify'])
     def classify(self, ufile):
+        if not self.classifier:
+            self.classifier = api.get_classifier()
         upload_path = os.path.join(BASE_FILE_PATH, self.folder_name)
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
@@ -83,8 +90,22 @@ class App(object):
         return json.dumps(out)
 
     @cherrypy.config(**{'tools.cors.on': True})
-    @cherrypy.expose(['device'])
+    @cherrypy.expose(['detect'])
     def detect(self):
+        out = {
+            'result':{
+                'x_min': 77.5373477935791,
+                'x_max': 376.87816429138184,
+                'y_min': 66.69588661193848,
+                'y_max': 387.60104179382324,
+                'class_name': 'tiger'
+            }
+        }
+        return json.dumps(out)
+    
+    @cherrypy.config(**{'tools.cors.on': True})
+    @cherrypy.expose(['task'])
+    def addTask(self):
         out = {
             'result':{
                 'x_min': 77.5373477935791,
