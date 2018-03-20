@@ -1,7 +1,7 @@
 # coding:utf-8
+import json
 import os
 import uuid
-import json
 
 import cherrypy
 from cvtron.modeling.classifier import api
@@ -12,6 +12,7 @@ from cors import cors
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
+
 class Classifier(object):
     def __init__(self, folder_name=None):
         self.BASE_FILE_PATH = BASE_FILE_PATH
@@ -20,7 +21,7 @@ class Classifier(object):
         else:
             self.folder_name = folder_name
         self.classifier = api.get_classifier()
-    
+
     def process_result(self, result):
         json_result = []
         for each in result:

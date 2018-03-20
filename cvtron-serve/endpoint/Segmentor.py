@@ -1,14 +1,16 @@
 #coding:utf-8
 import os
 import uuid
-import json
+
 import cherrypy
 from cvtron.modeling.segmentor import api
 from cvtron.utils.image_loader import write_image
+
 from config import BASE_FILE_PATH
 from cors import cors
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
+
 
 class Segmentor(object):
     def __init__(self, folder_name=None):
@@ -37,6 +39,6 @@ class Segmentor(object):
                 out.write(data)
                 size += len(data)
         pred_image = self.segmentor.segment(upload_file)
-        out_filename = 'img_' + str(uuid.uuid4()).split('-')[0]+'.jpg'
-        write_image(pred_image, os.path.join(upload_path,out_filename))
+        out_filename = 'img_' + str(uuid.uuid4()).split('-')[0] + '.jpg'
+        write_image(pred_image, os.path.join(upload_path, out_filename))
         return out_filename

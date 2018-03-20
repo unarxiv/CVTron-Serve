@@ -1,19 +1,21 @@
+import json
 import os
 import uuid
-import json
 
 import cherrypy
 from cvtron.modeling.detector import api
+
 from config import BASE_FILE_PATH
 from cors import cors
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
+
 class Detector(object):
-    def __init__(self, folder_name = None):
+    def __init__(self, folder_name=None):
         self.BASE_FILE_PATH = BASE_FILE_PATH
         if not folder_name:
-            self.folder_name = 'img_d_'+str(uuid.uuid4()).split('-')[0]
+            self.folder_name = 'img_d_' + str(uuid.uuid4()).split('-')[0]
         else:
             self.folder_name = folder_name
         self.detector = api.get_detector()
