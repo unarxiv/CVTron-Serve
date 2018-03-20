@@ -1,15 +1,15 @@
 # coding:utf-8
 
+import json
 import os
-import cherrypy
 import uuid
+
+import cherrypy
 from cvtron.modeling.classifier import api
 from cvtron.utils.reporter import print_prob
-from utils.machine_reporter import Machine
+
 from config import BASE_FILE_PATH
-import json
-
-
+from utils.machine_reporter import Machine
 
 CHERRY_CONFIG = {
     'global': {
@@ -20,12 +20,17 @@ CHERRY_CONFIG = {
         'server.socket_timeout': 60
     },
     '/static': {
-        'tools.cors.on': True,
-        'tools.staticdir.on' : True,
-        'tools.staticdir.dir' : os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'),
-        'tools.staticdir.index' : 'index.html'
+        'tools.cors.on':
+        True,
+        'tools.staticdir.on':
+        True,
+        'tools.staticdir.dir':
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'),
+        'tools.staticdir.index':
+        'index.html'
     }
 }
+
 
 def process_result(result):
     '''
@@ -33,20 +38,19 @@ def process_result(result):
     '''
     json_result = []
     for each in result:
-        result_dic = {
-            'type': each[0],
-            'prob': str(each[1])
-        }
+        result_dic = {'type': each[0], 'prob': str(each[1])}
         json_result.append(result_dic)
     return json_result
 
+
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
+
 
 class App(object):
     def __init__(self):
-        self.folder_name = 'img_'+str(uuid.uuid4()).split('-')[0]
+        self.folder_name = 'img_' + str(uuid.uuid4()).split('-')[0]
         self.classifier = None
-    
+
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose(['classify'])
     def classify(self, ufile):
@@ -66,25 +70,21 @@ class App(object):
                 size += len(data)
         # Now classify the input image
         topn = print_prob(self.classifier.classify(upload_file), 5)
-        out = {
-            'result': process_result(topn)
-        }
+        out = {'result': process_result(topn)}
         return json.dumps(out)
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose(['device'])
     def device(self):
         m = Machine()
-        out = {
-            'result': m.get_all()
-        }
+        out = {'result': m.get_all()}
         return json.dumps(out)
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose(['detect'])
     def detect(self):
         out = {
-            'result':{
+            'result': {
                 'x_min': 77.5373477935791,
                 'x_max': 376.87816429138184,
                 'y_min': 66.69588661193848,
@@ -93,12 +93,12 @@ class App(object):
             }
         }
         return json.dumps(out)
-    
+
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose(['task'])
     def addTask(self):
         out = {
-            'result':{
+            'result': {
                 'x_min': 77.5373477935791,
                 'x_max': 376.87816429138184,
                 'y_min': 66.69588661193848,
@@ -107,6 +107,7 @@ class App(object):
             }
         }
         return json.dumps(out)
+
 
 if __name__ == '__main__':
     cherrypy.quickstart(App(), '/', CHERRY_CONFIG)

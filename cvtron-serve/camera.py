@@ -1,6 +1,7 @@
-import time
-import threading
 import io
+import threading
+import time
+
 try:
     from greenlet import getcurrent as get_ident
 except ImportError:
@@ -14,10 +15,12 @@ try:
 except ImportError:
     raise ValueError('Raspberry Pi Camera Not Found')
 
+
 class CameraEvent(object):
     """An Event-like class that signals all active clients when a new frame is
     available.
     """
+
     def __init__(self):
         self.events = {}
 
@@ -54,6 +57,7 @@ class CameraEvent(object):
     def clear(self):
         """Invoked from each client's thread after a frame was processed."""
         self.events[get_ident()][0].clear()
+
 
 class BaseCamera(object):
     thread = None  # background thread that reads frames from camera
@@ -107,6 +111,7 @@ class BaseCamera(object):
                 break
         BaseCamera.thread = None
 
+
 class PiCamera(BaseCamera):
     @staticmethod
     def frames():
@@ -115,8 +120,8 @@ class PiCamera(BaseCamera):
             time.sleep(2)
 
             stream = io.BytesIO()
-            for _ in camera.capture_continuous(stream, 'jpeg',
-                                                 use_video_port=True):
+            for _ in camera.capture_continuous(
+                    stream, 'jpeg', use_video_port=True):
                 # return current frame
                 stream.seek(0)
                 yield stream.read()

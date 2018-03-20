@@ -1,7 +1,7 @@
 # coding:utf-8
 import os
 import re
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 
 
 def safeFloatCast(strNumber):
@@ -52,8 +52,13 @@ class Machine(object):
 
     def get_gpu(self):
         # Get ID, processing and memory utilization for all GPUs
-        p = Popen(["nvidia-smi", "--query-gpu=index,uuid,utilization.gpu,memory.total,memory.used,memory.free,driver_version,name,gpu_serial,display_active,display_mode",
-                   "--format=csv,noheader,nounits"], stdout=PIPE)
+        p = Popen(
+            [
+                "nvidia-smi",
+                "--query-gpu=index,uuid,utilization.gpu,memory.total,memory.used,memory.free,driver_version,name,gpu_serial,display_active,display_mode",
+                "--format=csv,noheader,nounits"
+            ],
+            stdout=PIPE)
         output = p.stdout.read().decode('UTF-8')
         # output = output[2:-1] # Remove b' and ' from string added by python
         # print(output)
@@ -61,7 +66,7 @@ class Machine(object):
         # Split on line break
         lines = output.split(os.linesep)
         # print(lines)
-        numDevices = len(lines)-1
+        numDevices = len(lines) - 1
         deviceIds = []
         gpuUtil = []
         memTotal = []
@@ -80,7 +85,7 @@ class Machine(object):
                 elif (i == 1):
                     uuid = vals[i]
                 elif (i == 2):
-                    gpuUtil.append(safeFloatCast(vals[i])/100)
+                    gpuUtil.append(safeFloatCast(vals[i]) / 100)
                 elif (i == 3):
                     memTotal.append(safeFloatCast(vals[i]))
                 elif (i == 4):
@@ -115,7 +120,7 @@ class Machine(object):
 
     def get_all(self):
         return {
-            'cpu':self.get_cpu(),
-            'gpu':self.get_gpu(),
-            'mem':self.get_mem()
+            'cpu': self.get_cpu(),
+            'gpu': self.get_gpu(),
+            'mem': self.get_mem()
         }
