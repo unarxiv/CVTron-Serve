@@ -1,7 +1,8 @@
 # coding:utf-8
+import json
 import os
 import uuid
-import json
+
 import cherrypy
 
 from cvtron.modeling.segmentor import api
@@ -68,9 +69,9 @@ class Segmentor(object):
                 if not data:
                     break
                 out.write(data)
-                size+=len(data)
+                size += len(data)
         return upload_file
-    
+
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
     def start_train(self):
