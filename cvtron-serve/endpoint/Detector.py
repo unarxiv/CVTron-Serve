@@ -3,10 +3,11 @@ import os
 import uuid
 
 import cherrypy
+
 from cvtron.modeling.detector import api
 
-from config import BASE_FILE_PATH
-from cors import cors
+from .config import BASE_FILE_PATH
+from .cors import cors
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 

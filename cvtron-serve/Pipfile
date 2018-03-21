@@ -17,6 +17,7 @@ cvtron = "*"
 autoflake = "*"
 yapf = "*"
 isort = "*"
+logbook = "*"
 
 
 [requires]

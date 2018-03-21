@@ -7,8 +7,8 @@ import cherrypy
 from cvtron.modeling.classifier import api
 from cvtron.utils.reporter import print_prob
 
-from config import BASE_FILE_PATH
-from cors import cors
+from .config import BASE_FILE_PATH
+from .cors import cors
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
