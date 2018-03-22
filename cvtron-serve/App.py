@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 import os
 import cherrypy
 from endpoint.Classifier import Classifier
@@ -22,6 +22,7 @@ def main():
         '/static',
         config={
             '/': {
+                'tools.cors.on': True,
                 'tools.staticdir.on':
                 True,
                 'tools.staticdir.dir':

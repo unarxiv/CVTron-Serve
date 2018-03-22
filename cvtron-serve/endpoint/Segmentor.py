@@ -9,6 +9,7 @@ from cvtron.modeling.segmentor import api
 from cvtron.utils.image_loader import write_image
 
 from .config import BASE_FILE_PATH
+from . import config
 from .cors import cors
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
@@ -26,6 +27,7 @@ class Segmentor(object):
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
     def segment(self, ufile):
+        config.isOccupied = True
         if not self.segmentor:
             self.segmentor = api.get_segmentor()
         upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)

@@ -6,3 +6,5 @@ LOADED_ENDPOINT = {
     'is_detection_open': True,
     'is_segmentation_open': True
 }
+
+isOccupied = False

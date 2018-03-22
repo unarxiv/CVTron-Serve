@@ -2,9 +2,7 @@
 import requests
 
 url = [
-    'http://127.0.0.1:8080/classifier/classify',
-    'http://127.0.0.1:8080/detector/detect',
-    'http://127.0.0.1:8080/segmentor/segment'
+    'http://127.0.0.1:9090/segmentor/segment'
     ]
 
 for each in url:
