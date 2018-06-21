@@ -79,13 +79,11 @@ class Segmentor(object):
     def start_train(self):
         cl = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(cl))
-        config = json.loads(rawbody)
-        print(config)
-        '''
+        config = json.loads(rawbody.decode('utf-8'))
         try:
             dlt = api.get_segmentor_trainer(config)
             dlt.train()
             return 'started'
         except Exception:
             return 'failed'
-        '''
+        
