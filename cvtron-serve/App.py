@@ -6,11 +6,12 @@ from endpoint.Detector import Detector
 from endpoint.Segmentor import Segmentor
 from endpoint.Resource import Resource
 from endpoint.Resource import Static
-
+from endpoint.cors import cors
 
 def main():
+    cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
     cherrypy.config.update({
-        'server.socket_host': '127.0.0.1',
+        'server.socket_host': '0.0.0.0',
         'server.socket_port': 9090,
     })
     cherrypy.tree.mount(Segmentor(), '/segmentor')
