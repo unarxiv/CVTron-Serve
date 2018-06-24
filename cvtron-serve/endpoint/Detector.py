@@ -99,6 +99,10 @@ class Detector(object):
         try:
             detector = api.get_detector(config)
             detector.train()
-            return 'training started'
+            result = {
+                'config': config,
+                'log_file_name': 'log.json'
+            }
+            return json.dumps(result)
         except Exception:
-            return 'training failed'
+            return 'failed'

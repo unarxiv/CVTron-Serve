@@ -101,7 +101,11 @@ class Segmentor(object):
         try:
             dlt = api.get_segmentor_trainer(config)
             dlt.train()
-            return 'started'
+            result = {
+                'config': config,
+                'log_file_name': 'log.json'
+            }
+            return json.dumps(result)
         except Exception:
             return 'failed'
         
