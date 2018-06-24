@@ -7,6 +7,7 @@ import cherrypy
 
 from cvtron.modeling.segmentor import api
 from cvtron.utils.image_loader import write_image
+from cvtron.data_zoo.compress_util import ArchiveFile
 
 from .config import BASE_FILE_PATH
 from . import config
@@ -19,7 +20,7 @@ class Segmentor(object):
     def __init__(self, folder_name=None):
         self.BASE_FILE_PATH = BASE_FILE_PATH
         if not folder_name:
-            self.folder_name = 'img_' + str(uuid.uuid4()).split('-')[0]
+            self.folder_name = 'img_' + uuid.uuid4().hex
         else:
             self.folder_name = folder_name
         self.segmentor = api.get_segmentor()
@@ -72,7 +73,22 @@ class Segmentor(object):
                     break
                 out.write(data)
                 size += len(data)
-        return upload_file
+        # Unzip File and return file Id
+        ## Generate file id
+        fid = uuid.uuid4().hex
+        ## Set Uncompress path
+        uncompress_path = os.path.join(self.BASE_FILE_PATH, 'uncompress')
+        uncompress_path = os.path.join(uncompress_path, fid)
+        ## Unzip
+        af = ArchiveFile(upload_file)
+        ### Delete Origin File to save disk space
+        af.unzip(uncompress_path, deleteOrigin=True)
+        result = {
+            'result': 'success',
+            'file_id': fid
+        }
+        return json.dumps(result)
+
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose

@@ -27,7 +27,7 @@ class Resource(object):
             return 'busy'
         else:
             return 'ok'
-
+    
 class Static(object):
     def __init__(self):
         # Use as Static Folder Endpoint

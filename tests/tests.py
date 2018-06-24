@@ -9,7 +9,6 @@ def test_inference():
     for each in url:
         files = {'ufile': open('tests/tiger.jpeg', 'rb')}
         r = requests.post(each, files=files)
-        print(r)
         print(r.text)
 
 def test_train():
@@ -22,5 +21,13 @@ def test_misc():
     r = requests.get(hardware_url)
     print(r.text)
 
+def test_upload_zip():
+    upload_url = 'http://127.0.0.1:9090/segmentor/upload_train_file'
+    files = {
+        'ufile': open('tests/classification.zip', 'rb')
+    }
+    r = requests.post(upload_url, files = files)
+    print(r.text)
+
 if __name__ == '__main__':
-    test_misc()
+    test_upload_zip()
