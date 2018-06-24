@@ -24,7 +24,7 @@ def test_misc():
 def test_upload_zip():
     upload_url = 'http://127.0.0.1:9090/segmentor/upload_train_file'
     files = {
-        'ufile': open('tests/classification.zip', 'rb')
+        'dataset': open('tests/classification.zip', 'rb')
     }
     r = requests.post(upload_url, files = files)
     print(r.text)

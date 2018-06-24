@@ -60,15 +60,15 @@ class Segmentor(object):
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
-    def upload_train_file(self, ufile):
+    def upload_train_file(self, dataset):
         upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
-        upload_file = os.path.join(upload_path, ufile.filename)
+        upload_file = os.path.join(upload_path, dataset.filename)
         size = 0
         with open(upload_file, 'wb') as out:
             while True:
-                data = ufile.file.read(8192)
+                data = dataset.file.read(8192)
                 if not data:
                     break
                 out.write(data)
