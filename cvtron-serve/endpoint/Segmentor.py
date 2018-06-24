@@ -96,6 +96,8 @@ class Segmentor(object):
         cl = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(cl))
         config = json.loads(rawbody.decode('utf-8'))
+        file_id = config['file']
+        config = config['config']
         try:
             dlt = api.get_segmentor_trainer(config)
             dlt.train()
