@@ -25,15 +25,14 @@ class Detector(object):
     @cherrypy.expose
     def get_infer_config(self):
         config = api.get_infer_config()
-        print(config)
         return json.dumps(config)
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
-    def detect(self, ufile):
-        cl = cherrypy.request.headers['Content-Length']
-        rawbody = cherrypy.request.body.read(int(cl))
-        config = json.loads(rawbody.decode('utf-8'))
+    def detect(self, ufile, model_name):
+        model_name = cherrypy.request.params.get('model_name')
+        print(model_name)
+        # Handler for model: model_name
         detector = api.get_detector()
         upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)
         if not os.path.exists(upload_path):
@@ -47,9 +46,9 @@ class Detector(object):
                     break
                 out.write(data)
                 size += len(data)
-        result = detector.infer(upload_file, config['model_dir'])
-        print(result)
-        return json.dumps(result)
+        # result = detector.infer(upload_file, config['model_dir'])
+        # print(result)
+        return 'success'
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose

@@ -12,6 +12,8 @@ from cvtron.data_zoo.compress_util import ArchiveFile
 from .config import BASE_FILE_PATH
 from . import config
 from .cors import cors
+from .train_processor import TrainTask
+from .train_processor import TrainTasks
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
@@ -96,11 +98,16 @@ class Segmentor(object):
         cl = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(cl))
         config = json.loads(rawbody.decode('utf-8'))
+        print(config)
         file_id = config['file']
         config = config['config']
         try:
             dlt = api.get_segmentor_trainer(config)
-            dlt.train()
+            tts = TrainTasks()
+            tt = TrainTask(dlt, 'log.json', 'tmp/', 'tmp/')
+            tts.add(tt)
+            tt.start()
+            tts.save('./tts.json')
             result = {
                 'config': config,
                 'log_file_name': 'log.json'
