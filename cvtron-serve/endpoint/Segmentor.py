@@ -57,7 +57,6 @@ class Segmentor(object):
     @cherrypy.expose
     def get_train_config(self):
         config = api.get_defaultConfig()
-        print(config)
         return json.dumps(config)
 
     @cherrypy.config(**{'tools.cors.on': True})
@@ -98,16 +97,17 @@ class Segmentor(object):
         cl = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(cl))
         config = json.loads(rawbody.decode('utf-8'))
-        print(config)
         file_id = config['file']
         config = config['config']
         try:
             dlt = api.get_segmentor_trainer(config)
             tts = TrainTasks()
-            tt = TrainTask(dlt, 'log.json', 'tmp/', 'tmp/')
+            tt = TrainTask(dlt, 'log.json', 'tmp/', 'segment')
             tts.add(tt)
-            tt.start()
-            tts.save('./tts.json')
+            print(tt.getId())
+            print(tts.get(tt.getId()))
+            tts.get(tt.getId()).start()
+            tts.save('static/tts.json')
             result = {
                 'config': config,
                 'log_file_name': 'log.json'

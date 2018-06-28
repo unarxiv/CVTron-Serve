@@ -46,9 +46,17 @@ class Detector(object):
                     break
                 out.write(data)
                 size += len(data)
-        # result = detector.infer(upload_file, config['model_dir'])
-        # print(result)
-        return 'success'
+        result = [
+            {
+                "x_min": 19.675,
+                "class_name": "dog",
+                "y_max": 554.65,
+                "x_max": 323.3521,
+                "y_min": 24.7567
+            }
+        ]
+        return json.dumps(result)
+
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
