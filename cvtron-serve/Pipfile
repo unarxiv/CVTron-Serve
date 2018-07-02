@@ -18,6 +18,7 @@ autoflake = "*"
 yapf = "*"
 isort = "*"
 logbook = "*"
+celery = "*"
 
 
 [requires]

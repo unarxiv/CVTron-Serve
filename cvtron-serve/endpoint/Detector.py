@@ -3,9 +3,8 @@ import os
 import uuid
 
 import cherrypy
-
-from cvtron.modeling.detector import api
 from cvtron.data_zoo.compress_util import ArchiveFile
+from cvtron.modeling.detector import api
 
 from .config import BASE_FILE_PATH
 from .cors import cors
@@ -46,17 +45,14 @@ class Detector(object):
                     break
                 out.write(data)
                 size += len(data)
-        result = [
-            {
-                "x_min": 19.675,
-                "class_name": "dog",
-                "y_max": 554.65,
-                "x_max": 323.3521,
-                "y_min": 24.7567
-            }
-        ]
+        result = [{
+            "x_min": 19.675,
+            "class_name": "dog",
+            "y_max": 554.65,
+            "x_max": 323.3521,
+            "y_min": 24.7567
+        }]
         return json.dumps(result)
-
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
@@ -82,10 +78,7 @@ class Detector(object):
         af = ArchiveFile(upload_file)
         ### Delete Origin File to save disk space
         af.unzip(uncompress_path, deleteOrigin=True)
-        result = {
-            'result': 'success',
-            'file_id': fid
-        }
+        result = {'result': 'success', 'file_id': fid}
         return json.dumps(result)
 
     @cherrypy.config(**{'tools.cors.on': True})
@@ -101,15 +94,13 @@ class Detector(object):
         cl = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(cl))
         config = json.loads(rawbody.decode('utf-8'))
-        config['weblog_dir'] = '/home/wujia/examples/platform/test-platform/CVTron-Serve/cvtron-serve/static/log'
+        config[
+            'weblog_dir'] = '/home/wujia/examples/platform/test-platform/CVTron-Serve/cvtron-serve/static/log'
         print(config)
         try:
             detector = api.get_detector(config)
             detector.train()
-            result = {
-                'config': config,
-                'log_file_name': 'log.json'
-            }
+            result = {'config': config, 'log_file_name': 'log.json'}
             return json.dumps(result)
         except Exception:
             return 'failed'

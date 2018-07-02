@@ -1,16 +1,16 @@
-import os
 import json
+import os
 import uuid
-import multiprocessing as mul
-from multiprocessing import Process
+
 from cvtron.utils.logger.Logger import logger
+
 
 class TrainTask(object):
     def __init__(self, trainer, logFile, modelFile, trainType):
         self.trainer = trainer
         self.type = trainType
         self.taskId = uuid.uuid4().hex
-        self.logFile =  logFile
+        self.logFile = logFile
         self.modelFile = modelFile
         self.pid = None
         self.status = 'Ready'
@@ -35,7 +35,7 @@ class TrainTask(object):
     def load(self, modelFile, logFile, pid, taskId, taskType, status):
         self.modelFile = modelFile
         self.pid = pid
-        self.status = status 
+        self.status = status
         self.logFile = logFile
         self.id = taskId
         self.type = taskType
@@ -53,21 +53,24 @@ class TrainTask(object):
             'type': self.type
         }
 
+
 class TrainTasks(object):
     def __init__(self):
         self.tasks = []
-    
+
     def add(self, task):
         self.tasks.append(task)
-    
+
     def load(self, filename):
         self.tasks = []
         with open(filename, 'r') as f:
             fromTasks = json.load(f)
             for each in fromTasks:
                 print(each)
-                t = TrainTask(None, each['logFile'], each['modelFile'], each['type'])
-                t.load(each['modelFile'], each['logFile'], each['pid'], each['id'], each['type'], each['status'])
+                t = TrainTask(None, each['logFile'], each['modelFile'],
+                              each['type'])
+                t.load(each['modelFile'], each['logFile'], each['pid'],
+                       each['id'], each['type'], each['status'])
                 self.tasks.append(t)
 
     def save(self, filename):
@@ -89,4 +92,4 @@ class TrainTasks(object):
             return None
 
     def toDict(self):
-        return list(map(lambda x:x.toDict(), self.tasks))
+        return list(map(lambda x: x.toDict(), self.tasks))

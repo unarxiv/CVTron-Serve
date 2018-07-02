@@ -4,16 +4,14 @@ import os
 import uuid
 
 import cherrypy
-
+from cvtron.data_zoo.compress_util import ArchiveFile
 from cvtron.modeling.segmentor import api
 from cvtron.utils.image_loader import write_image
-from cvtron.data_zoo.compress_util import ArchiveFile
 
-from .config import BASE_FILE_PATH
 from . import config
+from .config import BASE_FILE_PATH
 from .cors import cors
-from .train_processor import TrainTask
-from .train_processor import TrainTasks
+from .train_processor import TrainTask, TrainTasks
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
@@ -84,12 +82,8 @@ class Segmentor(object):
         af = ArchiveFile(upload_file)
         ### Delete Origin File to save disk space
         af.unzip(uncompress_path, deleteOrigin=True)
-        result = {
-            'result': 'success',
-            'file_id': fid
-        }
+        result = {'result': 'success', 'file_id': fid}
         return json.dumps(result)
-
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
@@ -108,11 +102,7 @@ class Segmentor(object):
             print(tts.get(tt.getId()))
             tts.get(tt.getId()).start()
             tts.save('static/tts.json')
-            result = {
-                'config': config,
-                'log_file_name': 'log.json'
-            }
+            result = {'config': config, 'log_file_name': 'log.json'}
             return json.dumps(result)
         except Exception:
             return 'failed'
-        

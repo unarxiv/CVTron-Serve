@@ -8,6 +8,7 @@ from endpoint.Resource import Resource
 from endpoint.Resource import Static
 from endpoint.cors import cors
 
+
 def main():
     cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
     cherrypy.config.update({
@@ -23,7 +24,8 @@ def main():
         '/static',
         config={
             '/': {
-                'tools.cors.on': True,
+                'tools.cors.on':
+                True,
                 'tools.staticdir.on':
                 True,
                 'tools.staticdir.dir':
