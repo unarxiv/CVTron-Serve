@@ -2,7 +2,15 @@ import json
 import os
 import uuid
 
+from celery import Celery
 from cvtron.utils.logger.Logger import logger
+
+from .config import celery_broker_url
+
+
+class Scheduler(object):
+    def __init__(self):
+        self.scheduler = Celery('serve', broker=celery_broker_url)
 
 
 class TrainTask(object):

@@ -11,6 +11,7 @@ from cvtron.utils.image_loader import write_image
 from . import config
 from .config import BASE_FILE_PATH
 from .cors import cors
+from .scheduler import start_train_task
 from .train_processor import TrainTask, TrainTasks
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
@@ -94,15 +95,9 @@ class Segmentor(object):
         file_id = config['file']
         config = config['config']
         try:
-            dlt = api.get_segmentor_trainer(config)
-            tts = TrainTasks()
-            tt = TrainTask(dlt, 'log.json', 'tmp/', 'segment')
-            tts.add(tt)
-            print(tt.getId())
-            print(tts.get(tt.getId()))
-            tts.get(tt.getId()).start()
-            tts.save('static/tts.json')
+            r = start_train_task.delay('segmentor', config)
             result = {'config': config, 'log_file_name': 'log.json'}
             return json.dumps(result)
-        except Exception:
+        except Exception as e:
+            print(e)
             return 'failed'

@@ -18,7 +18,11 @@ autoflake = "*"
 yapf = "*"
 isort = "*"
 logbook = "*"
-celery = "*"
+celery = {extras = ["sqs"]}
+redis = "*"
+flower = {editable = true, git = "https://github.com/unarxiv/flower"}
+tornado = "*"
+paste = "*"
 
 
 [requires]
