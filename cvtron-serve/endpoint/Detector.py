@@ -1,13 +1,18 @@
-import json
 import os
+import sys
+import json
 import uuid
-
+import shutil
 import cherrypy
-from cvtron.data_zoo.compress_util import ArchiveFile
+import traceback
 from cvtron.modeling.detector import api
+from cvtron.utils.logger.Logger import logger
+from cvtron.data_zoo.compress_util import ArchiveFile
+from cvtron.trainers.detector.object_detection_trainer import ObjectDetectionTrainer
 
-from .config import BASE_FILE_PATH
 from .cors import cors
+from .config import BASE_FILE_PATH
+from .config import STATIC_FILE_PATH
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
@@ -15,9 +20,10 @@ cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 class Detector(object):
     def __init__(self, folder_name=None):
         self.BASE_FILE_PATH = BASE_FILE_PATH
+        self.id = str(uuid.uuid4()).split('-')[0]
         if not folder_name:
-            self.folder_name = 'img_d_' + str(uuid.uuid4()).split('-')[0]
-        else:
+            self.folder_name = 'img_d_' + self.id
+        else:   
             self.folder_name = folder_name
 
     @cherrypy.config(**{'tools.cors.on': True})
@@ -56,7 +62,7 @@ class Detector(object):
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
-    def upload_train_file(self, ufile):
+    def upload(self, ufile):
         upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
@@ -73,19 +79,34 @@ class Detector(object):
         ## Generate file id
         fid = uuid.uuid4().hex
         ## Set Uncompress path
-        uncompress_path = os.path.join(self.BASE_FILE_PATH, 'uncompress')
+        uncompress_path = upload_path
         ## Unzip
         af = ArchiveFile(upload_file)
         ### Delete Origin File to save disk space
         af.unzip(uncompress_path, deleteOrigin=True)
-        result = {'result': 'success', 'file_id': fid}
+        modelFile = '/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip'
+        modelZip = ArchiveFile(modelFile)
+        modelZip.unzip(upload_path, deleteOrigin=False)
+
+        train_config = {
+            'pipeline_config_file': os.path.join(upload_path, 'pipeline.config'),
+            'weblog_dir': os.path.join(STATIC_FILE_PATH, self.id),
+            'log_every_n_steps':1,
+            'train_dir': upload_path,
+            'fine_tune_ckpt': os.path.join(upload_path, 'model.ckpt'),
+            'data_dir': upload_path
+        }
+        self.trainer = ObjectDetectionTrainer(train_config, upload_path)
+        self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
+        result = {'result': 'success', 'file_id': self.id}
         return json.dumps(result)
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
     def get_train_config(self):
-        config = api.get_train_config()
-        print(config)
+        config = {
+            'num_steps':200000
+        }
         return json.dumps(config)
 
     @cherrypy.config(**{'tools.cors.on': True})
@@ -94,13 +115,12 @@ class Detector(object):
         cl = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(cl))
         config = json.loads(rawbody.decode('utf-8'))
-        config[
-            'weblog_dir'] = '/home/wujia/examples/platform/test-platform/CVTron-Serve/cvtron-serve/static/log'
         print(config)
         try:
-            detector = api.get_detector(config)
-            detector.train()
+            override_config = config['config']
+            self.trainer.override_train_configs(override_config)
+            self.trainer.start()
             result = {'config': config, 'log_file_name': 'log.json'}
             return json.dumps(result)
         except Exception:
-            return 'failed'
+            traceback.print_exc(file=sys.stdout)

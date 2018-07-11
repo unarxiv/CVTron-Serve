@@ -33,7 +33,7 @@ class TrainTask(object):
         if self.status == 'Ready':
             pid = os.fork()
             if pid == 0:
-                self.trainer.train()
+                self.trainer.start()
             else:
                 self.pid = pid
                 self.status = 'Running'
