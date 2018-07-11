@@ -84,7 +84,7 @@ class Detector(object):
         af = ArchiveFile(upload_file)
         ### Delete Origin File to save disk space
         af.unzip(uncompress_path, deleteOrigin=True)
-        modelFile = '/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip'
+        modelFile = '/home/sfermi/Documents/Programming/model/ssd_mobilenet_v1_coco.zip'
         modelZip = ArchiveFile(modelFile)
         modelZip.unzip(upload_path, deleteOrigin=False)
 
@@ -96,6 +96,8 @@ class Detector(object):
             'fine_tune_ckpt': os.path.join(upload_path, 'model.ckpt'),
             'data_dir': upload_path
         }
+        print('train_config')
+        print(train_config)
         self.trainer = ObjectDetectionTrainer(train_config, upload_path)
         self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
         result = {'result': 'success', 'file_id': self.id}

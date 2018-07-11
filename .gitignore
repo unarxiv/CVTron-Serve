@@ -4,7 +4,6 @@
 tmp/
 static/
 tts.json
-config.py
 config.example.py
 celeryconfig.py
 flowerconfig.py
