@@ -36,7 +36,6 @@ class Detector(object):
     @cherrypy.expose
     def detect(self, ufile, model_name):
         model_name = cherrypy.request.params.get('model_name')
-        print(model_name)
         # Handler for model: model_name
         detector = api.get_detector()
         upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)
@@ -84,7 +83,7 @@ class Detector(object):
         af = ArchiveFile(upload_file)
         ### Delete Origin File to save disk space
         af.unzip(uncompress_path, deleteOrigin=True)
-        modelFile = '/home/sfermi/Documents/Programming/model/ssd_mobilenet_v1_coco.zip'
+        modelFile = '/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip'
         modelZip = ArchiveFile(modelFile)
         modelZip.unzip(upload_path, deleteOrigin=False)
 
@@ -96,8 +95,6 @@ class Detector(object):
             'fine_tune_ckpt': os.path.join(upload_path, 'model.ckpt'),
             'data_dir': upload_path
         }
-        print('train_config')
-        print(train_config)
         self.trainer = ObjectDetectionTrainer(train_config, upload_path)
         self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
         result = {'result': 'success', 'file_id': self.id}
@@ -117,9 +114,21 @@ class Detector(object):
         cl = cherrypy.request.headers['Content-Length']
         rawbody = cherrypy.request.body.read(int(cl))
         config = json.loads(rawbody.decode('utf-8'))
-        print(config)
         try:
             override_config = config['config']
+            request_id = config['file']
+            request_folder_name = 'img_d_' + request_id
+            train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
+            train_config = {
+                'pipeline_config_file': os.path.join(train_path, 'pipeline.config'),
+                'weblog_dir': os.path.join(STATIC_FILE_PATH, self.id),
+                'log_every_n_steps':1,
+                'train_dir': train_path,
+                'fine_tune_ckpt': os.path.join(train_path, 'model.ckpt'),
+                'data_dir': train_path
+            }
+            self.trainer = ObjectDetectionTrainer(train_config, train_path)
+            self.trainer.set_annotation(os.path.join(train_path, 'annotations.json'))
             self.trainer.override_train_configs(override_config)
             self.trainer.start()
             result = {'config': config, 'log_file_name': 'log.json'}

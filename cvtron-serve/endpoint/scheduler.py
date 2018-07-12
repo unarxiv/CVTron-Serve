@@ -3,10 +3,10 @@ import os
 from celery import Celery
 from cvtron.modeling.segmentor import api
 
-from .config import celery_backend_url, celery_broker_url
+# from .config import celery_backend_url, celery_broker_url
 
-scheduler = Celery(
-    'cvtron', broker=celery_broker_url, backend=celery_backend_url)
+# scheduler = Celery(
+#    'cvtron', broker=celery_broker_url, backend=celery_backend_url)
 
 
 @scheduler.task

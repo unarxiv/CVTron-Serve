@@ -38,7 +38,6 @@ class Resource(object):
         tts.load('static/tts.json')
         return json.dumps(tts.toDict())
 
-
 class Static(object):
     def __init__(self):
         # Use as Static Folder Endpoint
