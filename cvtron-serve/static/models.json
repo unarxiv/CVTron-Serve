@@ -1,0 +1,34 @@
+[
+    {
+        "id": "1",
+        "name": "ssd_inception_v2",
+        "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+        "url": "N/A",
+        "task": "detector",
+        "pretrained": "Yes"
+    },
+    {
+        "id": "2",
+        "name": "faster_rcnn_inception_v2",
+        "path": "/home/sfermi/Documents/Programming/model/faster_rcnn_inception_v2.zip",
+        "url": "N/A",
+        "task": "detector",
+        "pretrained": "Yes"
+    },
+    {
+        "id": "3",
+        "name": "ssd_mobilenet_v1_coco",
+        "path": "/home/sfermi/Documents/Programming/model/ssd_mobilenet_v1_coco.zip",
+        "url": "N/A",
+        "task": "detector",
+        "pretrained": "Yes"
+    },
+    {
+        "id": "4",
+        "name": "deeplab_v3",
+        "path": "/home/sfermi/Documents/Programming/model/ssd_mobilenet_v1_coco.zip",
+        "url": "N/A",
+        "task": "segmentor",
+        "pretrained": "No"
+    }
+]
