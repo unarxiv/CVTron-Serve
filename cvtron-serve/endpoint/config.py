@@ -11,4 +11,3 @@ isOccupied = False
 
 celery_broker_url = 'redis://:cvtrondemo@118.89.28.34:6379/0'
 celery_backend_url = 'redis://:cvtrondemo@118.89.28.34:6379/0'
-# celery_broker_url = 'sqs://AKIAJZVDLOMLODWL3B5Q:7SwEU9g34mCF8WOEw2Z8dIuKYwfpFVBt0QefZ6pj@'
