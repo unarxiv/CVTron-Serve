@@ -8,6 +8,7 @@ import traceback
 from cvtron.modeling.detector import api
 from cvtron.utils.logger.Logger import logger
 from cvtron.data_zoo.compress_util import ArchiveFile
+from cvtron.data_zoo.compress_util import ToArchiveFolder
 from cvtron.trainers.detector.object_detection_trainer import ObjectDetectionTrainer
 
 from .cors import cors
@@ -135,3 +136,24 @@ class Detector(object):
             return json.dumps(result)
         except Exception:
             traceback.print_exc(file=sys.stdout)
+
+    @cherrypy.config(**{'tools.cors.on': True})
+    @cherrypy.expose
+    def get_model(self, model_id):
+        model_id = cherrypy.request.params.get('model_id')
+        request_folder_name = 'img_d_' + model_id
+        train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
+        if not os.path.exists(train_path):
+            raise cherrypy.HTTPError(404)
+        taf = ToArchiveFolder(train_path)
+        compressedFile = os.path.join(STATIC_FILE_PATH, model_id)
+        if not os.path.exists(compressedFile):
+            os.makedirs(compressedFile)
+        compressedFile = os.path.join(compressedFile, model_id + '.zip')
+        print(compressedFile)
+        taf.zip(compressedFile)
+        result = {
+            'code': '200',
+            'url': '/static/' + model_id + '/' + model_id + '.zip'
+        }
+        return json.dumps(result)
