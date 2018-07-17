@@ -24,6 +24,7 @@ flower = {editable = true, git = "https://github.com/unarxiv/flower"}
 tornado = "*"
 paste = "*"
 pycocotools = "*"
+simplejson = "*"
 
 
 [requires]

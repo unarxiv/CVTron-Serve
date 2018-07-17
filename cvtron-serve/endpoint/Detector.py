@@ -3,13 +3,16 @@ import sys
 import json
 import uuid
 import shutil
+import decimal
 import _thread
 import cherrypy
 import traceback
+import simplejson as sjson
 from cvtron.modeling.detector import api
 from cvtron.utils.logger.Logger import logger
 from cvtron.data_zoo.compress_util import ArchiveFile
 from cvtron.data_zoo.compress_util import ToArchiveFolder
+from cvtron.modeling.detector.slim_object_detector import SlimObjectDetector
 from cvtron.trainers.detector.object_detection_trainer import ObjectDetectionTrainer
 
 from .cors import cors
@@ -18,15 +21,25 @@ from .config import STATIC_FILE_PATH
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
-
 class Detector(object):
     def __init__(self, folder_name=None):
         self.BASE_FILE_PATH = BASE_FILE_PATH
         self.id = str(uuid.uuid4()).split('-')[0]
+        self.ready_to_infer = False
         if not folder_name:
             self.folder_name = 'img_d_' + self.id
         else:   
             self.folder_name = folder_name
+
+    def _init_inference(self, model_id):
+        self.sod = SlimObjectDetector()
+        base_path = 'img_d_' + model_id
+        base_path = os.path.join(self.BASE_FILE_PATH, base_path)
+        label_map_path = os.path.join(base_path, 'label_map.pbtxt')
+        ckpt_path = os.path.join(base_path, 'frozen_inference_graph.pb')
+        self.sod.set_label_map(label_map_path)
+        self.sod.init(ckpt_path)
+        self.ready_to_infer = True
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
@@ -34,6 +47,7 @@ class Detector(object):
         config = api.get_infer_config()
         return json.dumps(config)
 
+    @cherrypy.tools.json_out()
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
     def detect(self, ufile, model_name):
@@ -52,14 +66,13 @@ class Detector(object):
                     break
                 out.write(data)
                 size += len(data)
-        result = [{
-            "x_min": 19.675,
-            "class_name": "dog",
-            "y_max": 554.65,
-            "x_max": 323.3521,
-            "y_min": 24.7567
-        }]
-        return json.dumps(result)
+        if not self.ready_to_infer:
+            self._init_inference(model_name)
+        results =  self.sod.detect(upload_file)
+        response = {
+            'results': results
+        }
+        return results
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
