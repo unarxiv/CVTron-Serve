@@ -3,6 +3,7 @@ import sys
 import json
 import uuid
 import shutil
+import _thread
 import cherrypy
 import traceback
 from cvtron.modeling.detector import api
@@ -93,9 +94,10 @@ class Detector(object):
             'weblog_dir': os.path.join(STATIC_FILE_PATH, self.id),
             'log_every_n_steps':1,
             'train_dir': upload_path,
-            'fine_tune_ckpt': os.path.join(upload_path, 'model.ckpt'),
+            'fine_tune_ckpt': os.path.join(upload_path, 'pretrained/model.ckpt'),
             'data_dir': upload_path
         }
+        train_config['pre-trained_model'] = 'ssd_mobilenet_v1'
         self.trainer = ObjectDetectionTrainer(train_config, upload_path)
         self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
         result = {'result': 'success', 'file_id': self.id}
@@ -105,7 +107,10 @@ class Detector(object):
     @cherrypy.expose
     def get_train_config(self):
         config = {
-            'num_steps':200000
+            'batch_size':24,
+            'learning_rate':0.001,
+            'num_steps':200000,
+            'log_every_n_steps':100
         }
         return json.dumps(config)
 
@@ -122,7 +127,7 @@ class Detector(object):
             train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
             train_config = {
                 'pipeline_config_file': os.path.join(train_path, 'pipeline.config'),
-                'weblog_dir': os.path.join(STATIC_FILE_PATH, self.id),
+                'weblog_dir': os.path.join(STATIC_FILE_PATH, request_id),
                 'log_every_n_steps':1,
                 'train_dir': train_path,
                 'fine_tune_ckpt': os.path.join(train_path, 'model.ckpt'),
@@ -130,9 +135,10 @@ class Detector(object):
             }
             self.trainer = ObjectDetectionTrainer(train_config, train_path)
             self.trainer.set_annotation(os.path.join(train_path, 'annotations.json'))
-            self.trainer.override_train_configs(override_config)
-            self.trainer.start()
-            result = {'config': config, 'log_file_name': 'log.json'}
+            self.trainer.override_pipeline_config(override_config, os.path.join(train_path, 'pipeline.config'))
+            # pid = os.fork()
+            _thread.start_new_thread(self.trainer.start, ())
+            result = {'config': config, 'log_file_name': request_id + '/log.json', 'taskId': request_id}
             return json.dumps(result)
         except Exception:
             traceback.print_exc(file=sys.stdout)
@@ -150,10 +156,9 @@ class Detector(object):
         if not os.path.exists(compressedFile):
             os.makedirs(compressedFile)
         compressedFile = os.path.join(compressedFile, model_id + '.zip')
-        print(compressedFile)
         taf.zip(compressedFile)
         result = {
             'code': '200',
-            'url': '/static/' + model_id + '/' + model_id + '.zip'
+            'url': 'http://118.89.28.34:9090/static/' + model_id + '/' + model_id + '.zip'
         }
         return json.dumps(result)
