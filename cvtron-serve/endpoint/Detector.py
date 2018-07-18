@@ -161,6 +161,7 @@ class Detector(object):
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
     def get_model(self, model_id):
+        always_refresh = True
         model_id = cherrypy.request.params.get('model_id')
         request_folder_name = model_id
         train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
@@ -171,7 +172,7 @@ class Detector(object):
         if not os.path.exists(compressedFile):
             os.makedirs(compressedFile)
         compressedFile = os.path.join(compressedFile, model_id + '.zip')
-        if os.path.exists(compressedFile):
+        if os.path.exists(compressedFile) and not always_refresh:
             logger.info('model exists,skipping')
             result = {
                 'code': '200',
