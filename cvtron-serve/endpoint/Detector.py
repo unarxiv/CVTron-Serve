@@ -33,8 +33,10 @@ class Detector(object):
 
     def _init_inference(self, model_id):
         self.sod = SlimObjectDetector()
-        base_path = 'img_d_' + model_id
+        base_path = model_id
         base_path = os.path.join(self.BASE_FILE_PATH, base_path)
+        if not os.path.exists(base_path):
+            raise cherrypy.HTTPError(404)
         label_map_path = os.path.join(base_path, 'label_map.pbtxt')
         ckpt_path = os.path.join(base_path, 'frozen_inference_graph.pb')
         self.sod.set_label_map(label_map_path)
@@ -77,7 +79,8 @@ class Detector(object):
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
     def upload(self, ufile):
-        upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)
+        fid = uuid.uuid4().hex
+        upload_path = os.path.join(self.BASE_FILE_PATH, fid)
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
         upload_file = os.path.join(upload_path, ufile.filename)
@@ -91,7 +94,6 @@ class Detector(object):
                 size += len(data)
         # Unzip File and return file Id
         ## Generate file id
-        fid = uuid.uuid4().hex
         ## Set Uncompress path
         uncompress_path = upload_path
         ## Unzip
@@ -104,7 +106,7 @@ class Detector(object):
 
         train_config = {
             'pipeline_config_file': os.path.join(upload_path, 'pipeline.config'),
-            'weblog_dir': os.path.join(STATIC_FILE_PATH, self.id),
+            'weblog_dir': os.path.join(STATIC_FILE_PATH, fid),
             'log_every_n_steps':1,
             'train_dir': upload_path,
             'fine_tune_ckpt': os.path.join(upload_path, 'pretrained/model.ckpt'),
@@ -113,7 +115,7 @@ class Detector(object):
         train_config['pre-trained_model'] = 'ssd_mobilenet_v1'
         self.trainer = ObjectDetectionTrainer(train_config, upload_path)
         self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
-        result = {'result': 'success', 'file_id': self.id}
+        result = {'result': 'success', 'file_id': fid}
         return json.dumps(result)
 
     @cherrypy.config(**{'tools.cors.on': True})
@@ -123,7 +125,7 @@ class Detector(object):
             'batch_size':24,
             'learning_rate':0.001,
             'num_steps':200000,
-            'log_every_n_steps':100
+            'log_every_n_steps':1
         }
         return json.dumps(config)
 
@@ -136,7 +138,7 @@ class Detector(object):
         try:
             override_config = config['config']
             request_id = config['file']
-            request_folder_name = 'img_d_' + request_id
+            request_folder_name = request_id
             train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
             train_config = {
                 'pipeline_config_file': os.path.join(train_path, 'pipeline.config'),
@@ -160,7 +162,7 @@ class Detector(object):
     @cherrypy.expose
     def get_model(self, model_id):
         model_id = cherrypy.request.params.get('model_id')
-        request_folder_name = 'img_d_' + model_id
+        request_folder_name = model_id
         train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
         if not os.path.exists(train_path):
             raise cherrypy.HTTPError(404)
@@ -169,9 +171,17 @@ class Detector(object):
         if not os.path.exists(compressedFile):
             os.makedirs(compressedFile)
         compressedFile = os.path.join(compressedFile, model_id + '.zip')
-        taf.zip(compressedFile)
-        result = {
-            'code': '200',
-            'url': 'http://118.89.28.34:9090/static/' + model_id + '/' + model_id + '.zip'
-        }
-        return json.dumps(result)
+        if os.path.exists(compressedFile):
+            logger.info('model exists,skipping')
+            result = {
+                'code': '200',
+                'url': 'http://118.89.28.34:9090/static/' + model_id + '/' + model_id + '.zip'
+            }
+            return json.dumps(result)
+        else:
+            taf.zip(compressedFile)
+            result = {
+                'code': '200',
+                'url': 'http://118.89.28.34:9090/static/' + model_id + '/' + model_id + '.zip'
+            }
+            return json.dumps(result)
