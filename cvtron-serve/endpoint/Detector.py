@@ -7,7 +7,6 @@ import decimal
 import _thread
 import cherrypy
 import traceback
-import simplejson as sjson
 from cvtron.modeling.detector import api
 from cvtron.utils.logger.Logger import logger
 from cvtron.data_zoo.compress_util import ArchiveFile
@@ -100,7 +99,7 @@ class Detector(object):
         af = ArchiveFile(upload_file)
         ### Delete Origin File to save disk space
         af.unzip(uncompress_path, deleteOrigin=True)
-        modelFile = '/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip'
+        modelFile = '/home/ubuntu/.cvtron/model_zoo/ssd_inception_v2_coco_11_06_2017.zip'
         modelZip = ArchiveFile(modelFile)
         modelZip.unzip(upload_path, deleteOrigin=False)
 

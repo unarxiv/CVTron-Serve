@@ -26,7 +26,7 @@ class Classifier(object):
             self.folder_name = 'img_' + str(uuid.uuid4()).split('-')[0]
         else:
             self.folder_name = folder_name
-        self.classifier = api.get_classifier()
+        # self.classifier = api.get_classifier()
 
     def process_result(self, result):
         json_result = []

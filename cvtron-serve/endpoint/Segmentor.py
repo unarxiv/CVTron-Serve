@@ -23,7 +23,7 @@ class Segmentor(object):
             self.folder_name = 'img_' + uuid.uuid4().hex
         else:
             self.folder_name = folder_name
-        self.segmentor = api.get_segmentor()
+        # self.segmentor = api.get_segmentor()
 
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
