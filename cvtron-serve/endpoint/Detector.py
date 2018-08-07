@@ -127,7 +127,7 @@ class Detector(object):
         # }
         # train_config['pre-trained_model'] = 'ssd_inception_v2'
         self.trainer = ObjectDetectionTrainer({}, upload_path)
-        self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
+        self.valid_anno = self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
         result = {'result': 'success', 'file_id': fid}
         print(result)
         return json.dumps(result)
@@ -163,13 +163,17 @@ class Detector(object):
                 'fine_tune_ckpt': os.path.join(train_path, 'model.ckpt'),
                 'data_dir': train_path
             }
+            result = {'config': config, 'log_file_name': request_id + '/log.json', 'taskId': request_id}
+            if self.valid_anno == 0:
+                print('no valid annotation.')
+                return json.dumps(result)
             self.trainer = ObjectDetectionTrainer(train_config, train_path)
             self.trainer.set_annotation(os.path.join(train_path, 'annotations.json'))
             self.trainer.override_pipeline_config(override_config, os.path.join(train_path, 'pipeline.config'))
             # pid = os.fork()
             emailAddr = 'jia.wu@szu.edu.cn'
             _thread.start_new_thread(self.trainer.start, (inform, (request_id, emailAddr)))
-            result = {'config': config, 'log_file_name': request_id + '/log.json', 'taskId': request_id}
+            # result = {'config': config, 'log_file_name': request_id + '/log.json', 'taskId': request_id}
             return json.dumps(result)
         except Exception:
             traceback.print_exc(file=sys.stdout)
