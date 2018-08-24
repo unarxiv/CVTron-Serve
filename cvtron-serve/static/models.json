@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "faster_rcnn_inception_resnet_v2",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
@@ -10,7 +10,7 @@
   {
     "id": "2",
     "name": "faster_rcnn_inception_v2",
-    "path": "/home/sfermi/Documents/Programming/model/faster_rcnn_inception_v2.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
@@ -18,15 +18,15 @@
   {
     "id": "3",
     "name": "faster_rcnn_resnet101",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_mobilenet_v1_coco.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
   },
   {
     "id": "4",
-    "name": "faster_rcnn_resnet152",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "mask_rcnn_inception_v2",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
@@ -34,7 +34,7 @@
   {
     "id": "5",
     "name": "faster_rcnn_resnet50",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
@@ -42,7 +42,7 @@
   {
     "id": "6",
     "name": "mask_rcnn_resnet101",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
@@ -50,7 +50,7 @@
   {
     "id": "7",
     "name": "rfcn_resnet101",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
@@ -58,135 +58,175 @@
   {
     "id": "8",
     "name": "ssd_inception_v2",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
   },
   {
     "id": "9",
-    "name": "ssd_inception_v3",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "ssd_mobilenet_v1",
+    "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
   },
   {
     "id": "10",
-    "name": "ssd_mobilenet_v1",
+    "name": "alexnet",
     "path": "N/A",
-    "url": "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz",
-    "task": "detector",
+    "url": "N/A",
+    "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "11",
-    "name": "alexnet",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "inception_v1",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "12",
-    "name": "inception_v1",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "inception_v2",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "13",
-    "name": "inception_v2",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "inceptino_v3",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "14",
-    "name": "inceptino_v3",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "inception_v4",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "15",
-    "name": "inception_v4",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "resnet_v1_101",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
-  },
+  },  
   {
     "id": "16",
-    "name": "lenet",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "mobilenet_v1",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "17",
-    "name": "mobilenet_v1",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "nasnet-a_mobile",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "18",
-    "name": "nasnet",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "nasnet-a_large",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
-  },
+  },  
   {
     "id": "19",
-    "name": "overfeat",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "resnet_v1_50",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "20",
-    "name": "resnet_v1",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "resnet_v1_152",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "21",
-    "name": "resnet_v2",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "resnet_v2_50",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "22",
-    "name": "vgg",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "name": "resnet_v2_101",
+    "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },
   {
     "id": "23",
-    "name": "deeplab_v3",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_mobilenet_v1_coco.zip",
+    "name": "resnet_v2_152",
+    "path": "N/A",
     "url": "N/A",
-    "task": "segmentor",
-    "pretrained": "No"
-  },
+    "task": "classifier",
+    "pretrained": "Yes"
+  },    
   {
     "id": "24",
+    "name": "vgg_16",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "classifier",
+    "pretrained": "Yes"
+  },
+  {
+    "id": "25",
+    "name": "vgg_19",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "classifier",
+    "pretrained": "Yes"
+  },  
+  {
+    "id": "26",
+    "name": "deeplab_mobilenet_v2",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "segmentor",
+    "pretrained": "Yes"
+  },
+  {
+    "id": "27",
+    "name": "deeplab_xception_65",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "segmentor",
+    "pretrained": "Yes"
+  },
+  {
+    "id": "28",
+    "name": "mask_rcnn_resnet50",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "segmentor",
+    "pretrained": "Yes"
+  },  
+  {
+    "id": "29",
     "name": "mask_rcnn_resnet101",
-    "path": "/home/sfermi/Documents/Programming/model/ssd_inception_v2_coco_11_06_2017.zip",
+    "path": "N/A",
     "url": "N/A",
     "task": "segmentor",
     "pretrained": "Yes"
