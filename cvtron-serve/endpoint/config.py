@@ -1,4 +1,5 @@
 #coding:utf-8
+MODEL_PATH = '/home/ubuntu'
 BASE_FILE_PATH = './tmp'
 STATIC_FILE_PATH = './static'
 LOADED_ENDPOINT = {

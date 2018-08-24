@@ -15,12 +15,25 @@ from cvtron.modeling.detector.slim_object_detector import SlimObjectDetector
 from cvtron.trainers.detector.object_detection_trainer import ObjectDetectionTrainer
 
 from .cors import cors
+from .config import MODEL_PATH
 from .config import BASE_FILE_PATH
 from .config import STATIC_FILE_PATH
 sys.path.append('..')
 from utils import inform
 
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
+
+_MODEL_MAP = {
+    'faster_rcnn_inception_resnet_v2': 'faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28.zip',
+    'faster_rcnn_inception_v2': 'faster_rcnn_inception_v2_coco_2018_01_28.zip',
+    'faster_rcnn_resnet101': 'faster_rcnn_resnet101_coco_2018_01_28.zip',
+    'faster_rcnn_resnet50': 'faster_rcnn_resnet50_coco_2018_01_28.zip',
+    'mask_rcnn_inception_v2': 'mask_rcnn_inception_v2_coco_2018_01_28.zip',
+    'mask_rcnn_resnet101': '',
+    'rfcn_resnet101': 'rfcn_resnet101_coco_2018_01_28.zip',
+    'ssd_inception_v2': 'ssd_inception_v2_coco_11_06_2017.zip',
+    'ssd_mobilenet_v1': 'ssd_mobilenet_v1_coco_2018_01_28.zip'
+}
 
 class Detector(object):
     def __init__(self, folder_name=None):
@@ -41,7 +54,6 @@ class Detector(object):
         if not os.path.exists(base_path):
             raise cherrypy.HTTPError(404)
         label_map_path = os.path.join(base_path, 'label_map.pbtxt')
-        # ckpt_path = os.path.join(base_path, 'frozen_inference_graph.pb')
         exported_dir = os.path.join(test_pic_dir, 'exported')
         ckpt_path = os.path.join(exported_dir, 'frozen_inference_graph.pb')
         if os.path.exists(os.path.abspath(exported_dir)):
@@ -62,7 +74,6 @@ class Detector(object):
     @cherrypy.expose
     def detect(self, ufile, model_name):
         model_name = cherrypy.request.params.get('model_name')
-        # model_name = 'da67f84dc38f44d9943a9cdc56cab7f5'
         # Handler for model: model_name
         # detector = api.get_detector()
         upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)
@@ -81,6 +92,7 @@ class Detector(object):
             self._init_inference(model_name, upload_path)
             # self.ready_to_infer = False
         results =  self.sod.detect(upload_file)
+        print(results)
         response = {
             'results': results
         }
@@ -89,7 +101,7 @@ class Detector(object):
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
     def upload(self, ufile, modelId):
-        print('upload')
+        self.modelId = modelId
         fid = uuid.uuid4().hex
         upload_path = os.path.join(self.BASE_FILE_PATH, fid)
         if not os.path.exists(upload_path):
@@ -109,23 +121,11 @@ class Detector(object):
         uncompress_path = upload_path
         ## Unzip
         af = ArchiveFile(upload_file)
-        ### Delete Origin File to save disk space
         af.unzip(uncompress_path, deleteOrigin=True)
-        print(modelId)
-        modelFile = '/home/ubuntu/.cvtron/model_zoo/ssd_inception_v2_coco_11_06_2017.zip'
-        # modelFile = '/home/wujia/.cvtron/model_zoo/ssd_inception_v2_coco_11_06_2017.zip'
+        modelFile = os.path.join(os.path.join(MODEL_PATH, '.cvtron/model_zoo'), _MODEL_MAP[self.modelId])
         modelZip = ArchiveFile(modelFile)
         modelZip.unzip(upload_path, deleteOrigin=False)
 
-        # train_config = {
-        #     'pipeline_config_file': os.path.join(upload_path, 'pipeline.config'),
-        #     'weblog_dir': os.path.join(STATIC_FILE_PATH, fid),
-        #     'log_every_n_steps':1,
-        #     'train_dir': upload_path,
-        #     'fine_tune_ckpt': os.path.join(upload_path, 'pretrained/model.ckpt'),
-        #     'data_dir': upload_path
-        # }
-        # train_config['pre-trained_model'] = 'ssd_inception_v2'
         self.trainer = ObjectDetectionTrainer({}, upload_path)
         self.valid_anno = self.trainer.parse_dataset(os.path.join(upload_path, 'annotations.json'))
         result = {'result': 'success', 'file_id': fid}
@@ -139,7 +139,7 @@ class Detector(object):
             'batch_size':24,
             'learning_rate':0.001,
             'num_steps':200000,
-            'log_every_n_steps':100
+            'log_every_n_steps':10
         }
         return json.dumps(config)
 
@@ -183,7 +183,6 @@ class Detector(object):
     def get_model(self, model_id):
         always_refresh = True
         model_id = cherrypy.request.params.get('model_id')
-        print(model_id)
         request_folder_name = model_id
         train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
         if not os.path.exists(train_path):
@@ -207,4 +206,3 @@ class Detector(object):
                 'url': 'http://134.175.1.246:80/static/' + model_id + '/' + model_id + '.zip'
             }
             return json.dumps(result)
-
