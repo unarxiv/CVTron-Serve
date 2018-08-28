@@ -27,7 +27,7 @@ _MODEL_MAP = {
     'inception_v1': 'inception_v1_2016_08_28.zip',
     'inception_v2': 'inception_v2_2016_08_28.zip',
     'inception_v3': 'inception_v3_2016_08_28.zip',
-    'inception_v4': 'inception_v4_2016_08_28.zip',
+    'inception_v4': 'inception_v4_2016_09_09.zip',
     'mobilenet_v1': 'mobilenet_v1_1.0_224.zip',
     'nasnet-a_mobile': 'nasnet-a_mobile_04_10_2017.zip',
     'nasnet-a_large': 'nasnet-a_large_04_10_2017.zip',
@@ -52,11 +52,10 @@ class Classifier(object):
 
     def _init_inference(self, model_id, test_pic_dir):
         self.classifier = SlimClassifier()
-        base_path = model_id
-        base_path = os.path.join(self.BASE_FILE_PATH, base_path)
+        base_path = os.path.join(self.BASE_FILE_PATH, model_id)
         if not os.path.exists(base_path):
             raise cherrypy.HTTPError(404)
-        model_name = model_id
+        model_name = self.modelId
         model_path = base_path
         self.classifier.init(model_name, base_path)
         self.ready_to_infer = True
@@ -64,8 +63,8 @@ class Classifier(object):
     @cherrypy.tools.json_out()
     @cherrypy.config(**{'tools.cors.on': True})
     @cherrypy.expose
-    def classify(self, ufile):
-        # model_id = cherrypy.request.params.get('model_name')
+    def classify(self, ufile, model_name):
+        model_id = cherrypy.request.params.get('model_name')
         # Handler for model: model_name
         upload_path = os.path.join(self.BASE_FILE_PATH, self.folder_name)
         if not os.path.exists(upload_path):
@@ -80,10 +79,9 @@ class Classifier(object):
                 out.write(data)
                 size += len(data)
         # if not self.ready_to_infer:
-        #     self._init_inference(model_name, upload_path)
-        base_path = os.path.join(self.BASE_FILE_PATH, 'img_d_1234567890')
-        # model_name = 'inception_v1'
+        #     self._init_inference(model_id, upload_path)
         model_name = self.modelId
+        model_path = os.path.join(self.BASE_FILE_PATH, model_id)
         self.classifier = SlimClassifier()
         results =  self.classifier.classify(upload_file, model_name, base_path)
         print(results)
@@ -109,13 +107,11 @@ class Classifier(object):
                     break
                 out.write(data)
                 size += len(data)
-        upload_path = os.path.join(self.BASE_FILE_PATH, 'img_d_1234567890') 
-        upload_file = os.path.join(upload_path, 'flowers.zip')
         uncompress_path = upload_path
         af = ArchiveFile(upload_file)
         af.unzip(uncompress_path, deleteOrigin=False)
+
         modelFile = os.path.join(os.path.join(MODEL_PATH, '.cvtron/model_zoo'), _MODEL_MAP[self.modelId])
-        # modelFile = '/home/ubuntu/.cvtron/model_zoo/inception_v1.zip'
         modelZip = ArchiveFile(modelFile)
         modelZip.unzip(upload_path, deleteOrigin=False)
 
@@ -147,16 +143,15 @@ class Classifier(object):
         print(config)
         try:
             request_id = config['file']
-            request_folder_name = 'img_d_' + request_id
-            # train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
-            train_path = os.path.join(self.BASE_FILE_PATH, 'img_d_1234567890')
+            request_folder_name = request_id
+            train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
             configs = {
                 'fine_tune_ckpt': os.path.join(train_path, 'model.ckpt'),
                 'data_dir': train_path,
                 'weblog_dir': os.path.join(STATIC_FILE_PATH, request_id),
                 'train_dir': train_path,
             }
-            configs['pre-trained_model'] = 'inception_v1'
+            configs['pre-trained_model'] = self.modelId
             configs.update(config['config'])
             self.trainer = SlimClassifierTrainer(configs, train_path)
             self.trainer.set_dataset_info(os.path.join(train_path, 'annotations.json'))
