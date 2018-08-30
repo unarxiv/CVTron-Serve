@@ -160,7 +160,7 @@ class Detector(object):
                 'weblog_dir': os.path.join(STATIC_FILE_PATH, request_id),
                 'log_every_n_steps':config['config']['log_every_n_steps'],
                 'train_dir': train_path,
-                'fine_tune_ckpt': os.path.join(train_path, 'model.ckpt'),
+                'fine_tune_ckpt': os.path.join(train_path, 'pre-trained/model.ckpt'),
                 'data_dir': train_path
             }
             result = {'config': config, 'log_file_name': request_id + '/log.json', 'taskId': request_id}

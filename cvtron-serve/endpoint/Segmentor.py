@@ -122,7 +122,7 @@ class Segmentor(object):
             request_id = config['file']
             train_path = os.path.join(self.BASE_FILE_PATH, request_id)
             train_config = {
-                'fine_tune_ckpt': os.path.join(train_path, 'model.ckpt'),
+                'fine_tune_ckpt': os.path.join(train_path, 'pre-trained/model.ckpt'),
                 'data_dir': train_path,
                 'weblog_dir': os.path.join(STATIC_FILE_PATH, request_id),
                 'train_dir': train_path

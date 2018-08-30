@@ -29,6 +29,7 @@ _MODEL_MAP = {
     'inception_v3': 'inception_v3_2016_08_28.zip',
     'inception_v4': 'inception_v4_2016_09_09.zip',
     'mobilenet_v1': 'mobilenet_v1_1.0_224.zip',
+    'mobilenet_v2': 'mobilenet_v2_1.0_224.zip',
     'nasnet-a_mobile': 'nasnet-a_mobile_04_10_2017.zip',
     'nasnet-a_large': 'nasnet-a_large_04_10_2017.zip',
     'resnet_v1_50': 'resnet_v1_50_2016_08_28.zip',
@@ -146,7 +147,7 @@ class Classifier(object):
             request_folder_name = request_id
             train_path = os.path.join(self.BASE_FILE_PATH, request_folder_name)
             configs = {
-                'fine_tune_ckpt': os.path.join(train_path, 'model.ckpt'),
+                'fine_tune_ckpt': os.path.join(train_path, 'pre-trained/model.ckpt'),
                 'data_dir': train_path,
                 'weblog_dir': os.path.join(STATIC_FILE_PATH, request_id),
                 'train_dir': train_path,
