@@ -230,5 +230,13 @@
     "url": "N/A",
     "task": "segmentor",
     "pretrained": "Yes"
+  },
+  {
+    "id": "30",
+    "name": "mobilenet_v2",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "classifier",
+    "pretrained": "Yes"
   }  
 ]
