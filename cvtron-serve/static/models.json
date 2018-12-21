@@ -1,14 +1,6 @@
 [
   {
     "id": "1",
-    "name": "faster_rcnn_inception_resnet_v2",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "detector",
-    "pretrained": "Yes"
-  },
-  {
-    "id": "2",
     "name": "faster_rcnn_inception_v2",
     "path": "N/A",
     "url": "N/A",
@@ -16,23 +8,15 @@
     "pretrained": "Yes"
   },
   {
+    "id": "2",
+    "name": "faster_rcnn_inception_resnet_v2_atrous",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "detector",
+    "pretrained": "Yes"
+  },
+  {
     "id": "3",
-    "name": "faster_rcnn_resnet101",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "detector",
-    "pretrained": "Yes"
-  },
-  {
-    "id": "4",
-    "name": "mask_rcnn_inception_v2",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "detector",
-    "pretrained": "Yes"
-  },
-  {
-    "id": "5",
     "name": "faster_rcnn_resnet50",
     "path": "N/A",
     "url": "N/A",
@@ -40,15 +24,15 @@
     "pretrained": "Yes"
   },
   {
-    "id": "6",
-    "name": "mask_rcnn_resnet101",
+    "id": "4",
+    "name": "faster_rcnn_resnet101",
     "path": "N/A",
     "url": "N/A",
     "task": "detector",
     "pretrained": "Yes"
-  },
+  },  
   {
-    "id": "7",
+    "id": "5",
     "name": "rfcn_resnet101",
     "path": "N/A",
     "url": "N/A",
@@ -56,7 +40,7 @@
     "pretrained": "Yes"
   },
   {
-    "id": "8",
+    "id": "6",
     "name": "ssd_inception_v2",
     "path": "N/A",
     "url": "N/A",
@@ -64,8 +48,16 @@
     "pretrained": "Yes"
   },
   {
-    "id": "9",
+    "id": "7",
     "name": "ssd_mobilenet_v1",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "detector",
+    "pretrained": "Yes"
+  },
+  {
+    "id": "8",
+    "name": "ssd_mobilenet_v2",
     "path": "N/A",
     "url": "N/A",
     "task": "detector",
@@ -113,7 +105,7 @@
   },
   {
     "id": "15",
-    "name": "resnet_v1_101",
+    "name": "inception_resnet_v2",
     "path": "N/A",
     "url": "N/A",
     "task": "classifier",
@@ -121,38 +113,22 @@
   },  
   {
     "id": "16",
-    "name": "mobilenet_v1",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "classifier",
-    "pretrained": "Yes"
-  },
-  {
-    "id": "17",
-    "name": "nasnet-a_mobile",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "classifier",
-    "pretrained": "Yes"
-  },
-  {
-    "id": "18",
-    "name": "nasnet-a_large",
+    "name": "resnet_v1_50",
     "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
   },  
   {
-    "id": "19",
-    "name": "resnet_v1_50",
+    "id": "17",
+    "name": "resnet_v1_101",
     "path": "N/A",
     "url": "N/A",
     "task": "classifier",
     "pretrained": "Yes"
-  },
+  }, 
   {
-    "id": "20",
+    "id": "18",
     "name": "resnet_v1_152",
     "path": "N/A",
     "url": "N/A",
@@ -160,7 +136,7 @@
     "pretrained": "Yes"
   },
   {
-    "id": "21",
+    "id": "19",
     "name": "resnet_v2_50",
     "path": "N/A",
     "url": "N/A",
@@ -168,7 +144,7 @@
     "pretrained": "Yes"
   },
   {
-    "id": "22",
+    "id": "20",
     "name": "resnet_v2_101",
     "path": "N/A",
     "url": "N/A",
@@ -176,7 +152,7 @@
     "pretrained": "Yes"
   },
   {
-    "id": "23",
+    "id": "21",
     "name": "resnet_v2_152",
     "path": "N/A",
     "url": "N/A",
@@ -184,7 +160,7 @@
     "pretrained": "Yes"
   },    
   {
-    "id": "24",
+    "id": "22",
     "name": "vgg_16",
     "path": "N/A",
     "url": "N/A",
@@ -192,8 +168,24 @@
     "pretrained": "Yes"
   },
   {
-    "id": "25",
+    "id": "23",
     "name": "vgg_19",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "classifier",
+    "pretrained": "Yes"
+  },  
+  {
+    "id": "24",
+    "name": "mobilenet_v1",
+    "path": "N/A",
+    "url": "N/A",
+    "task": "classifier",
+    "pretrained": "Yes"
+  },   
+  {
+    "id": "25",
+    "name": "mobilenet_v2",
     "path": "N/A",
     "url": "N/A",
     "task": "classifier",
@@ -214,29 +206,5 @@
     "url": "N/A",
     "task": "segmentor",
     "pretrained": "Yes"
-  },
-  {
-    "id": "28",
-    "name": "mask_rcnn_resnet50",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "segmentor",
-    "pretrained": "Yes"
-  },  
-  {
-    "id": "29",
-    "name": "mask_rcnn_resnet101",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "segmentor",
-    "pretrained": "Yes"
-  },
-  {
-    "id": "30",
-    "name": "mobilenet_v2",
-    "path": "N/A",
-    "url": "N/A",
-    "task": "classifier",
-    "pretrained": "Yes"
-  }  
+  }
 ]

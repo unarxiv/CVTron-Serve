@@ -24,15 +24,14 @@ from utils import inform
 cherrypy.tools.cors = cherrypy._cptools.HandlerTool(cors)
 
 _MODEL_MAP = {
-    'faster_rcnn_inception_resnet_v2': 'faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28.zip',
     'faster_rcnn_inception_v2': 'faster_rcnn_inception_v2_coco_2018_01_28.zip',
+    'faster_rcnn_inception_resnet_v2_atrous': 'faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28.zip',
+    'faster_rcnn_resnet50': 'faster_rcnn_resnet50_coco_2018_01_28.zip',    
     'faster_rcnn_resnet101': 'faster_rcnn_resnet101_coco_2018_01_28.zip',
-    'faster_rcnn_resnet50': 'faster_rcnn_resnet50_coco_2018_01_28.zip',
-    'mask_rcnn_inception_v2': 'mask_rcnn_inception_v2_coco_2018_01_28.zip',
-    'mask_rcnn_resnet101': '',
     'rfcn_resnet101': 'rfcn_resnet101_coco_2018_01_28.zip',
     'ssd_inception_v2': 'ssd_inception_v2_coco_11_06_2017.zip',
-    'ssd_mobilenet_v1': 'ssd_mobilenet_v1_coco_2018_01_28.zip'
+    'ssd_mobilenet_v1': 'ssd_mobilenet_v1_coco_2018_01_28.zip',
+    'ssd_mobilenet_v2': 'ssd_mobilenet_v2_coco_2018_03_29.zip'
 }
 
 class Detector(object):
@@ -205,4 +204,4 @@ class Detector(object):
                 'code': '200',
                 'url': 'http://134.175.1.246:80/static/' + model_id + '/' + model_id + '.zip'
             }
-            return json.dumps(result)
+            return json.dumps(result)  

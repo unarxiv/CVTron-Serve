@@ -28,18 +28,17 @@ _MODEL_MAP = {
     'inception_v2': 'inception_v2_2016_08_28.zip',
     'inception_v3': 'inception_v3_2016_08_28.zip',
     'inception_v4': 'inception_v4_2016_09_09.zip',
-    'mobilenet_v1': 'mobilenet_v1_1.0_224.zip',
-    'mobilenet_v2': 'mobilenet_v2_1.0_224.zip',
-    'nasnet-a_mobile': 'nasnet-a_mobile_04_10_2017.zip',
-    'nasnet-a_large': 'nasnet-a_large_04_10_2017.zip',
+    'inception_resnet_v2': 'inception_resnet_v2_2016_08_30.zip',
     'resnet_v1_50': 'resnet_v1_50_2016_08_28.zip',
     'resnet_v1_101': 'resnet_v1_101_2016_08_28.zip',
     'resnet_v1_152': 'resnet_v1_152_2016_08_28.zip',
     'resnet_v2_50': 'resnet_v2_50_2017_04_14.zip',
     'resnet_v2_101': 'resnet_v2_101_2017_04_14.zip',
-    'resnet_v2_152': 'resnet_v2_152_2017_04_14.zip',  
+    'resnet_v2_152': 'resnet_v2_152_2017_04_14.zip',    
     'vgg_16': 'vgg_16_2016_08_28.zip',
     'vgg_19': 'vgg_19_2016_08_28.zip',  
+    'mobilenet_v1': 'mobilenet_v1_1.0_224.zip',
+    'mobilenet_v2': 'mobilenet_v2_1.0_224.zip',      
 }
 
 class Classifier(object):
